@@ -1,14 +1,29 @@
-import { StyleSheet } from 'react-native';
+import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Link } from "expo-router";
+import tweetsData from "@/assets/data/tweet";
+import Tweet from "@/components/Tweet";
+import AppIcon from "@/components/AppIcon";
+import colors from "@/config/colors";
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
-
-export default function TabOneScreen() {
+export default function HomeScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
+      <FlatList
+        data={tweetsData}
+        keyExtractor={(tweet) => tweet.id.toString()}
+        renderItem={({ item }) => <Tweet tweet={item} />}
+        showsVerticalScrollIndicator={false}
+      />
+      <Link href={"/upload"} asChild>
+        <TouchableOpacity style={styles.addButton}>
+          <AppIcon
+            name="plus"
+            iconSet="Entypo"
+            color={colors.white}
+            size={30}
+          />
+        </TouchableOpacity>
+      </Link>
     </View>
   );
 }
@@ -16,16 +31,17 @@ export default function TabOneScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 10,
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+  addButton: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: colors.primary,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    right: 15,
+    bottom: 15,
   },
 });
